@@ -1,16 +1,15 @@
 import wave_helper
 
-# EDIT wave
+# EDIT wave file
 MIN_VAL = -32768
 MAX_VAL = 32767
 INPUT_CHOOSE_FILE = "What's the name of the file you wish to edit? \n"
 INPUT_CHOOSE_FILE_ERR = "This file does not exist. Please try again.\n"
 INPUT_ACTION_MENU = "What would you like to do?\n1. Flip\n2. Negative\n" \
                     "3. Accelerate\n4. Decelerate\n5. Increase Vol\n6." \
-                    "Decrease Vol\n7.Low pass filter\n8. Finish Editing\n"
-INPUT_ACTION_ERR = "Please enter a digit between 1 to 8."
+                    " Decrease Vol\n7. Low pass filter\n8. Finish Editing\n"
+INPUT_ACTION_ERR = "Please enter a digit between 1 to 8.\n"
 MSG_SUCCESS = "Your file have been edited successfully."
-
 
 def get_action_num_from_user():
     action_input = input(INPUT_ACTION_MENU)
@@ -60,11 +59,13 @@ def edit_wave():
 
 def average_pair(pairs):
     new_pair = [0, 0]
-    for i in range(1):
+    for i in range(2):
         sum = 0
         for pair in pairs:
             sum += pair[i]
         new_pair[i] = sum / (len(pairs))
+
+    new_pair = regulate_and_round_pair(new_pair)
     return new_pair
 
 
@@ -75,6 +76,7 @@ def regulate_and_round_pair(pair):
             pair[i] = MIN_VAL
         if pair[i] > MAX_VAL:
             pair[i] = MAX_VAL
+    return pair
 
 
 def edit_1_flip(audio_data):
@@ -121,3 +123,6 @@ def edit_7_low_pass_filter(audio_data):
     for i in range(1, len(audio_data) - 1):  # Rest of the pairs
         audio_data[i] = average_pair(audio_data[i - 1:i + 2])
     return audio_data
+
+if __name__ == '__main__':
+    edit_wave()
